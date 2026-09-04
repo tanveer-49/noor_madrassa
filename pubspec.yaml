@@ -1,0 +1,57 @@
+name: noor_madrassa
+description: "Islamic Learning Companion - Learn, Reflect, Grow"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Navigation & State Management
+  get: ^4.6.6
+  get_storage: ^2.1.1
+
+  # UI Components
+  google_fonts: ^6.1.0
+  flutter_svg: ^2.0.9
+  shimmer: ^3.0.0
+  font_awesome_flutter: ^10.6.0
+
+  # Audio
+  just_audio: ^0.9.36
+
+  # Local Storage
+  path_provider: ^2.1.0
+  sqflite: ^2.3.0
+
+  # Utilities
+  intl: ^0.18.1
+  url_launcher: ^6.2.1
+  share_plus: ^7.2.1
+
+  # Icons
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+
+  # Assets - Sirf images folder rakho
+  assets:
+    - assets/images/
+    - assets/icons/
+
+  # FONTS COMPLETELY REMOVE KAREIN (Jab tak fonts download nahi karte)
+  # fonts:
+  #   - family: Inter
+  #     fonts:
+  #       - asset: assets/fonts/Inter-Regular.ttf
+  #         weight: 400
