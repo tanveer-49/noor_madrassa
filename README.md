@@ -12,7 +12,7 @@
 
 ---
 
-## 🌟 Features
+## Features
 
 ###  **Completed Features**
 
@@ -28,7 +28,7 @@
 | Dark/Light Mode |  Done | Theme toggle support |
 | README.md |  Done | Complete project documentation |
 
-### 🚧 **In Progress / Pending**
+### **In Progress / Pending**
 
 | Feature | Status    | Description |
 |---------|-----------|-------------|
