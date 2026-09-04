@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:noor_madrassa/app/app_colors.dart';
 import 'package:noor_madrassa/widgets/bottom_nav.dart';
+import 'package:noor_madrassa/screens/quran/quran_home_screen.dart';
+import 'package:noor_madrassa/screens/hadith/hadith_home_screen.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     const HomeContent(),
+    const QuranHomeScreen(),
+    const HadithHomeScreen(),
     const Placeholder(child: Text('Qur\'an Screen')),
     const Placeholder(child: Text('Hadith Screen')),
     const Placeholder(child: Text('Library Screen')),

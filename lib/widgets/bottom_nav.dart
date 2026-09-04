@@ -41,7 +41,7 @@ class CustomBottomNav extends StatelessWidget {
             activeIcon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.menu_book_outlined),
             activeIcon: Icon(Icons.menu_book),
             label: 'Qur\'an',
