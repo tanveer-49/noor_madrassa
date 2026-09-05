@@ -46,6 +46,7 @@ flutter:
 
   # Assets - Sirf images folder rakho
   assets:
+    - assets/images/splash_logo.png
     - assets/images/
     - assets/icons/
 
