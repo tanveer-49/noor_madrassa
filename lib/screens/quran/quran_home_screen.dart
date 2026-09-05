@@ -4,6 +4,8 @@ import 'package:noor_madrassa/app/app_colors.dart';
 import 'package:noor_madrassa/data/quran_data.dart';
 import 'package:noor_madrassa/models/surah_model.dart';
 import 'package:noor_madrassa/screens/quran/surah_reader_screen.dart';
+import 'package:noor_madrassa/utils/responsive.dart';
+import 'package:noor_madrassa/utils/theme_extensions.dart';
 
 class QuranHomeScreen extends StatefulWidget {
   const QuranHomeScreen({super.key});
@@ -24,57 +26,67 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.isDarkMode;
+
     return Scaffold(
-      backgroundColor: AppColors.warmCream,
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
-        title: const Text('Al-Qur\'an'),
-        backgroundColor: AppColors.warmCream,
+        title: Text(
+          'Al-Qur\'an',
+          style: TextStyle(
+            fontSize: Responsive.fontSize(context, 20),
+            color: context.textColor,
+          ),
+        ),
+        backgroundColor: context.backgroundColor,
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // Search functionality
-            },
+            icon: Icon(Icons.search, color: context.textColor),
+            onPressed: () {},
           ),
           IconButton(
-            icon: const Icon(Icons.bookmark_border),
-            onPressed: () {
-              // Bookmarks
-            },
+            icon: Icon(Icons.bookmark_border, color: context.textColor),
+            onPressed: () {},
           ),
         ],
       ),
       body: Column(
         children: [
-          // Quick Stats Card
-          _buildQuickStats(),
+
+          _buildQuickStats(context),
 
           const SizedBox(height: 16),
 
-          // Tabs: Surahs / Juz / Bookmarks
-          _buildTabs(),
+          // Tabs
+          _buildTabs(context),
 
           const SizedBox(height: 16),
 
           // Surah List
           Expanded(
-            child: _buildSurahList(),
+            child: _buildSurahList(context),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildQuickStats() {
+  Widget _buildQuickStats(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.emerald, AppColors.softEmerald],
-        ),
+        gradient: AppGradients.primaryGradient,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.emerald.withOpacity(0.3),
+            blurRadius: 20,
+            spreadRadius: 2,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -114,25 +126,25 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
     );
   }
 
-  Widget _buildTabs() {
+  Widget _buildTabs(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
-          _buildTabItem('Surahs', true),
-          _buildTabItem('Juz', false),
-          _buildTabItem('Bookmarks', false),
+          _buildTabItem(context, 'Surahs', true),
+          _buildTabItem(context, 'Juz', false),
+          _buildTabItem(context, 'Bookmarks', false),
         ],
       ),
     );
   }
 
-  Widget _buildTabItem(String label, bool isSelected) {
+  Widget _buildTabItem(BuildContext context, String label, bool isSelected) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -144,7 +156,7 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
           label,
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: isSelected ? Colors.white : AppColors.textSecondary,
+            color: isSelected ? Colors.white : context.textSecondaryColor,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
             fontSize: 14,
           ),
@@ -153,18 +165,18 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
     );
   }
 
-  Widget _buildSurahList() {
+  Widget _buildSurahList(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       itemCount: _filteredSurahs.length,
       itemBuilder: (context, index) {
         final surah = _filteredSurahs[index];
-        return _buildSurahTile(surah);
+        return _buildSurahTile(context, surah);
       },
     );
   }
 
-  Widget _buildSurahTile(Surah surah) {
+  Widget _buildSurahTile(BuildContext context, Surah surah) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -178,11 +190,11 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.05),
+              color: Colors.grey.withOpacity(context.isDarkMode ? 0.1 : 0.05),
               blurRadius: 5,
               offset: const Offset(0, 2),
             ),
@@ -190,18 +202,17 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
         ),
         child: Row(
           children: [
-            // Surah Number
             Container(
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: AppColors.lightMint,
+                color: context.isDarkMode ? AppColors.darkCard : AppColors.lightMint,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Center(
                 child: Text(
                   '${surah.id}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: AppColors.emerald,
@@ -210,46 +221,41 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
               ),
             ),
             const SizedBox(width: 16),
-            // Surah Name
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     surah.nameArabic,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.deepForest,
+                      color: context.textColor,
                     ),
                   ),
                   Text(
                     '${surah.nameEnglish} • ${surah.versesCount} verses • ${surah.placeOfRevelation}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
-                      color: AppColors.textSecondary,
+                      color: context.textSecondaryColor,
                     ),
                   ),
                 ],
               ),
             ),
-            // Translation and Arrow
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
                   surah.translation,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.textSecondary,
+                    color: context.textSecondaryColor,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: surah.placeOfRevelation == 'Makki'
                         ? Colors.orange.withOpacity(0.1)

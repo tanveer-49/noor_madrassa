@@ -1,12 +1,18 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:noor_madrassa/app/app_theme.dart';
-import 'package:noor_madrassa/screens/splash_screen.dart';
+import 'app/app_theme.dart';
+import 'services/theme_service.dart';
+import 'screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
+
+
+  Get.put(ThemeService());
+
   runApp(const NoorMadrassaApp());
 }
 
@@ -15,12 +21,17 @@ class NoorMadrassaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final themeService = Get.find<ThemeService>();
+
+    return GetMaterialApp(
       title: 'Noor Madrassa',
       debugShowCheckedModeBanner: false,
+
+      // Theme
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: themeService.themeMode,
+
       home: const SplashScreen(),
     );
   }

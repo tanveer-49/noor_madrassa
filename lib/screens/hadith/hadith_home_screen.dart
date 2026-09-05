@@ -6,6 +6,7 @@ import 'package:noor_madrassa/models/hadith_model.dart';
 import 'package:noor_madrassa/screens/hadith/hadith_collection_screen.dart';
 import 'package:noor_madrassa/screens/hadith/hadith_reader_screen.dart';
 import 'package:noor_madrassa/utils/responsive.dart';
+import 'package:noor_madrassa/utils/theme_extensions.dart';
 
 class HadithHomeScreen extends StatefulWidget {
   const HadithHomeScreen({super.key});
@@ -27,24 +28,25 @@ class _HadithHomeScreenState extends State<HadithHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.warmCream,
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
         title: Text(
           'Hadith Collections',
           style: TextStyle(
             fontSize: Responsive.fontSize(context, 20),
+            color: context.textColor,
           ),
         ),
-        backgroundColor: AppColors.warmCream,
+        backgroundColor: context.backgroundColor,
         elevation: 0,
         toolbarHeight: Responsive.height(context, 56),
         actions: [
           IconButton(
-            icon: Icon(Icons.search, size: Responsive.width(context, 24)),
+            icon: Icon(Icons.search, color: context.textColor),
             onPressed: () {},
           ),
           IconButton(
-            icon: Icon(Icons.bookmark_border, size: Responsive.width(context, 24)),
+            icon: Icon(Icons.bookmark_border, color: context.textColor),
             onPressed: () {},
           ),
         ],
@@ -78,15 +80,14 @@ class _HadithHomeScreenState extends State<HadithHomeScreen> {
       margin: EdgeInsets.symmetric(horizontal: Responsive.padding(context, 16)),
       padding: EdgeInsets.all(Responsive.padding(context, 16)),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.deepForest, AppColors.emerald],
-        ),
+        gradient: AppGradients.primaryGradient,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: AppColors.emerald.withOpacity(0.3),
             blurRadius: 20,
             spreadRadius: 2,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -179,7 +180,7 @@ class _HadithHomeScreenState extends State<HadithHomeScreen> {
       margin: EdgeInsets.symmetric(horizontal: Responsive.padding(context, 16)),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -209,7 +210,7 @@ class _HadithHomeScreenState extends State<HadithHomeScreen> {
             label,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: isSelected ? Colors.white : AppColors.textSecondary,
+              color: isSelected ? Colors.white : context.textSecondaryColor,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               fontSize: Responsive.fontSize(context, 14),
             ),
@@ -236,8 +237,6 @@ class _HadithHomeScreenState extends State<HadithHomeScreen> {
     );
   }
 
-  // lib/screens/hadith/hadith_home_screen.dart - Update collection card
-
   Widget _buildCollectionCard(BuildContext context, HadithCollection collection) {
     final color = Color(int.parse(collection.color.replaceFirst('#', 'FF'), radix: 16));
 
@@ -253,11 +252,11 @@ class _HadithHomeScreenState extends State<HadithHomeScreen> {
       child: Container(
         padding: EdgeInsets.all(Responsive.padding(context, 12)),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.08),
+              color: Colors.grey.withOpacity(context.isDarkMode ? 0.1 : 0.08),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -265,11 +264,10 @@ class _HadithHomeScreenState extends State<HadithHomeScreen> {
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min, // IMPORTANT
           children: [
             Container(
-              width: Responsive.width(context, 45),
-              height: Responsive.height(context, 45),
+              width: Responsive.width(context, 50),
+              height: Responsive.height(context, 50),
               decoration: BoxDecoration(
                 color: color.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
@@ -278,43 +276,41 @@ class _HadithHomeScreenState extends State<HadithHomeScreen> {
                 child: Text(
                   collection.icon,
                   style: TextStyle(
-                    fontSize: Responsive.fontSize(context, 24),
+                    fontSize: Responsive.fontSize(context, 28),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: Responsive.height(context, 6)),
+            SizedBox(height: Responsive.height(context, 8)),
             Text(
               collection.name,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: Responsive.fontSize(context, 12),
+                fontSize: Responsive.fontSize(context, 14),
                 fontWeight: FontWeight.w600,
-                color: AppColors.deepForest,
+                color: context.textColor,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            SizedBox(height: Responsive.height(context, 1)),
+            SizedBox(height: Responsive.height(context, 2)),
             Text(
               collection.nameArabic,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: Responsive.fontSize(context, 10),
-                color: AppColors.textSecondary,
+                fontSize: Responsive.fontSize(context, 12),
+                color: context.textSecondaryColor,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            SizedBox(height: Responsive.height(context, 1)),
+            SizedBox(height: Responsive.height(context, 2)),
             Text(
               '${collection.totalHadith} Ahadith',
               style: TextStyle(
-                fontSize: Responsive.fontSize(context, 9),
-                color: AppColors.textSecondary,
+                fontSize: Responsive.fontSize(context, 10),
+                color: context.textSecondaryColor,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
@@ -341,7 +337,7 @@ class _HadithHomeScreenState extends State<HadithHomeScreen> {
             margin: EdgeInsets.only(bottom: Responsive.height(context, 8)),
             padding: EdgeInsets.all(Responsive.padding(context, 16)),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: context.cardColor,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
@@ -354,7 +350,7 @@ class _HadithHomeScreenState extends State<HadithHomeScreen> {
                       hadith.reference,
                       style: TextStyle(
                         fontSize: Responsive.fontSize(context, 12),
-                        color: AppColors.textSecondary,
+                        color: context.textSecondaryColor,
                       ),
                     ),
                     Container(
@@ -363,7 +359,7 @@ class _HadithHomeScreenState extends State<HadithHomeScreen> {
                         vertical: Responsive.padding(context, 2),
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.lightMint,
+                        color: context.isDarkMode ? AppColors.darkCard : AppColors.lightMint,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
@@ -381,7 +377,7 @@ class _HadithHomeScreenState extends State<HadithHomeScreen> {
                   hadith.englishTranslation,
                   style: TextStyle(
                     fontSize: Responsive.fontSize(context, 14),
-                    color: AppColors.textPrimary,
+                    color: context.textColor,
                     height: 1.5,
                   ),
                   maxLines: 2,

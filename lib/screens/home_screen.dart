@@ -1,10 +1,12 @@
 // lib/screens/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:noor_madrassa/app/app_colors.dart';
-import 'package:noor_madrassa/widgets/bottom_nav.dart';
 import 'package:noor_madrassa/screens/quran/quran_home_screen.dart';
 import 'package:noor_madrassa/screens/hadith/hadith_home_screen.dart';
 import 'package:noor_madrassa/screens/library/books_home_screen.dart';
+import 'package:noor_madrassa/screens/profile/profile_screen.dart';
+import 'package:noor_madrassa/widgets/bottom_nav.dart';
+import 'package:noor_madrassa/utils/theme_extensions.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,10 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const QuranHomeScreen(),
     const HadithHomeScreen(),
     const BooksHomeScreen(),
-    const Placeholder(child: Text('Qur\'an Screen')),
-    const Placeholder(child: Text('Hadith Screen')),
-    const Placeholder(child: Text('Library Screen')),
-    const Placeholder(child: Text('Profile Screen')),
+    const ProfileScreen(),
   ];
 
   @override
@@ -43,43 +42,43 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// Home Content Widget
+// Home Content Widget -
 class HomeContent extends StatelessWidget {
   const HomeContent({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.isDarkMode;
+
     return Scaffold(
-      backgroundColor: AppColors.warmCream,
+      backgroundColor: context.backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top Bar: Greeting
+              // Top Bar
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Assalamu Alaikum! 👋',
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.deepForest,
-                          fontFamily: 'Inter',
+                          color: context.textColor,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'Wednesday, 3 September 2026',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: AppColors.textSecondary,
-                          fontFamily: 'Inter',
+                          color: context.textSecondaryColor,
                         ),
                       ),
                     ],
@@ -98,15 +97,12 @@ class HomeContent extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // Hero Card: Continue Journey
+              // Hero Card -
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [
-                      AppColors.deepForest,
-                      AppColors.emerald,
-                    ],
+                    colors: [AppColors.deepForest, AppColors.emerald],
                   ),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
@@ -127,7 +123,6 @@ class HomeContent extends StatelessWidget {
                         color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        fontFamily: 'Inter',
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -146,7 +141,6 @@ class HomeContent extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
-                        fontFamily: 'Inter',
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -182,14 +176,13 @@ class HomeContent extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // Quick Actions Grid
-              const Text(
+              // Quick Actions
+              Text(
                 'Quick Actions',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.deepForest,
-                  fontFamily: 'Inter',
+                  color: context.textColor,
                 ),
               ),
               const SizedBox(height: 12),
@@ -200,24 +193,24 @@ class HomeContent extends StatelessWidget {
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 12,
                 children: [
-                  _buildQuickAction(Icons.menu_book, 'Qur\'an'),
-                  _buildQuickAction(Icons.chrome_reader_mode, 'Hadith'),
-                  _buildQuickAction(Icons.local_library, 'Duas'),
-                  _buildQuickAction(Icons.school, 'Courses'),
+                  _buildQuickAction(context, Icons.menu_book, 'Qur\'an'),
+                  _buildQuickAction(context, Icons.chrome_reader_mode, 'Hadith'),
+                  _buildQuickAction(context, Icons.local_library, 'Duas'),
+                  _buildQuickAction(context, Icons.school, 'Courses'),
                 ],
               ),
 
               const SizedBox(height: 24),
 
-              // Daily Ayah
+              // Daily Ayah -
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.white,
+                  color: context.cardColor,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: Colors.grey.withOpacity(isDark ? 0.1 : 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -226,7 +219,7 @@ class HomeContent extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
@@ -234,11 +227,10 @@ class HomeContent extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.deepForest,
-                            fontFamily: 'Inter',
+                            color: context.textColor,
                           ),
                         ),
-                        Icon(
+                        const Icon(
                           Icons.favorite_border,
                           color: AppColors.islamicGold,
                         ),
@@ -256,13 +248,12 @@ class HomeContent extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       '"And never think that Allah is unaware of what the wrongdoers do."',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
-                        color: AppColors.textSecondary,
-                        fontFamily: 'Inter',
+                        color: context.textSecondaryColor,
                         height: 1.6,
                       ),
                     ),
@@ -272,17 +263,20 @@ class HomeContent extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // Madrassa Progress
+              // Madrassa Progress -
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.lightMint,
+                  color: isDark ? AppColors.darkCard : AppColors.lightMint,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.trending_up, color: AppColors.emerald),
-                    SizedBox(width: 12),
+                    Icon(
+                      Icons.trending_up,
+                      color: isDark ? AppColors.softEmerald : AppColors.emerald,
+                    ),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,15 +286,15 @@ class HomeContent extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.deepForest,
+                              color: context.textColor,
                             ),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
                             '22 of 30 lessons completed',
                             style: TextStyle(
                               fontSize: 14,
-                              color: AppColors.textSecondary,
+                              color: context.textSecondaryColor,
                             ),
                           ),
                         ],
@@ -311,7 +305,7 @@ class HomeContent extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.emerald,
+                        color: isDark ? AppColors.softEmerald : AppColors.emerald,
                       ),
                     ),
                   ],
@@ -321,19 +315,18 @@ class HomeContent extends StatelessWidget {
               const SizedBox(height: 16),
 
               // Recent Items
-              const Text(
+              Text(
                 'Recent',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.deepForest,
-                  fontFamily: 'Inter',
+                  color: context.textColor,
                 ),
               ),
               const SizedBox(height: 12),
-              _buildRecentItem('📖', 'Al-Kahf', 'Surah 18 • 1 min ago'),
-              _buildRecentItem('📚', 'Sahih Bukhari', 'Book of Belief • 15 min ago'),
-              _buildRecentItem('🎓', 'Fiqh of Salah', 'Lesson 7 • 2 hours ago'),
+              _buildRecentItem(context, '📖', 'Al-Kahf', 'Surah 18 • 1 min ago'),
+              _buildRecentItem(context, '📚', 'Sahih Bukhari', 'Book of Belief • 15 min ago'),
+              _buildRecentItem(context, '🎓', 'Fiqh of Salah', 'Lesson 7 • 2 hours ago'),
             ],
           ),
         ),
@@ -341,21 +334,19 @@ class HomeContent extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickAction(IconData icon, String label) {
+  Widget _buildQuickAction(BuildContext context, IconData icon, String label) {
     return GestureDetector(
-      onTap: () {
-        // Navigation logic
-      },
+      onTap: () {},
       child: Column(
         children: [
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: context.cardColor,  //
               borderRadius: BorderRadius.circular(14),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.08),
+                  color: Colors.grey.withOpacity(context.isDarkMode ? 0.1 : 0.08),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
@@ -370,10 +361,9 @@ class HomeContent extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
-              color: AppColors.textSecondary,
-              fontFamily: 'Inter',
+              color: context.textSecondaryColor,
             ),
           ),
         ],
@@ -381,16 +371,16 @@ class HomeContent extends StatelessWidget {
     );
   }
 
-  Widget _buildRecentItem(String emoji, String title, String subtitle) {
+  Widget _buildRecentItem(BuildContext context, String emoji, String title, String subtitle) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.05),
+            color: Colors.grey.withOpacity(context.isDarkMode ? 0.1 : 0.05),
             blurRadius: 5,
           ),
         ],
@@ -405,28 +395,26 @@ class HomeContent extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.deepForest,
-                    fontFamily: 'Inter',
+                    color: context.textColor,
                   ),
                 ),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.textSecondary,
-                    fontFamily: 'Inter',
+                    color: context.textSecondaryColor,
                   ),
                 ),
               ],
             ),
           ),
-          const Icon(
+          Icon(
             Icons.arrow_forward_ios,
             size: 14,
-            color: AppColors.textSecondary,
+            color: context.textSecondaryColor,
           ),
         ],
       ),

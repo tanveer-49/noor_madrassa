@@ -5,6 +5,7 @@ import 'package:noor_madrassa/data/books_data.dart';
 import 'package:noor_madrassa/models/book_model.dart';
 import 'package:noor_madrassa/screens/library/book_reader_screen.dart';
 import 'package:noor_madrassa/utils/responsive.dart';
+import 'package:noor_madrassa/utils/theme_extensions.dart';
 
 class BooksHomeScreen extends StatefulWidget {
   const BooksHomeScreen({super.key});
@@ -26,52 +27,51 @@ class _BooksHomeScreenState extends State<BooksHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.warmCream,
+      backgroundColor: context.backgroundColor,
       appBar: AppBar(
         title: Text(
           'Islamic Library',
           style: TextStyle(
             fontSize: Responsive.fontSize(context, 20),
+            color: context.textColor,
           ),
         ),
-        backgroundColor: AppColors.warmCream,
+        backgroundColor: context.backgroundColor,
         elevation: 0,
         toolbarHeight: Responsive.height(context, 56),
         actions: [
           IconButton(
-            icon: Icon(Icons.search, size: Responsive.width(context, 24)),
-            onPressed: () {
-              // Navigate to search
-            },
+            icon: Icon(Icons.search, color: context.textColor),
+            onPressed: () {},
           ),
         ],
       ),
       body: Column(
         children: [
           // Category Chips
-          _buildCategoryChips(),
+          _buildCategoryChips(context),
 
           const SizedBox(height: 16),
 
-          // Featured Books
-          _buildFeaturedBooks(),
+          // Featured Books -
+          _buildFeaturedBooks(context),
 
           const SizedBox(height: 16),
 
-          // All Books Grid
+          // All Books Grid -
           Expanded(
-            child: _buildBooksGrid(),
+            child: _buildBooksGrid(context),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildCategoryChips() {
+  Widget _buildCategoryChips(BuildContext context) {
     final categories = getCategories();
     return Container(
       height: 50,
-      padding: EdgeInsets.symmetric(horizontal: Responsive.padding(context, 16)),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
@@ -93,12 +93,9 @@ class _BooksHomeScreenState extends State<BooksHomeScreen> {
             },
             child: Container(
               margin: const EdgeInsets.only(right: 8),
-              padding: EdgeInsets.symmetric(
-                horizontal: Responsive.padding(context, 16),
-                vertical: Responsive.padding(context, 8),
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.emerald : AppColors.white,
+                color: isSelected ? AppColors.emerald : context.cardColor,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: isSelected ? AppColors.emerald : Colors.grey.shade300,
@@ -107,9 +104,9 @@ class _BooksHomeScreenState extends State<BooksHomeScreen> {
               child: Text(
                 category,
                 style: TextStyle(
-                  color: isSelected ? Colors.white : AppColors.textSecondary,
+                  color: isSelected ? Colors.white : context.textSecondaryColor,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                  fontSize: Responsive.fontSize(context, 13),
+                  fontSize: 13,
                 ),
               ),
             ),
@@ -119,25 +116,24 @@ class _BooksHomeScreenState extends State<BooksHomeScreen> {
     );
   }
 
-  Widget _buildFeaturedBooks() {
+  Widget _buildFeaturedBooks(BuildContext context) {
     final featuredBooks = dummyBooks.take(2).toList();
     return SizedBox(
       height: Responsive.height(context, 160),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: Responsive.padding(context, 16)),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: featuredBooks.length,
         itemBuilder: (context, index) {
           final book = featuredBooks[index];
-          return _buildFeaturedBookCard(book);
+          return _buildFeaturedBookCard(context, book);
         },
       ),
     );
   }
 
-  Widget _buildFeaturedBookCard(Book book) {
-    final color = Color(int.parse(book.coverColor.replaceFirst('#', 'FF'), radix: 16));
 
+  Widget _buildFeaturedBookCard(BuildContext context, Book book) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -150,18 +146,21 @@ class _BooksHomeScreenState extends State<BooksHomeScreen> {
       child: Container(
         width: Responsive.width(context, 280),
         margin: const EdgeInsets.only(right: 12),
-        padding: EdgeInsets.all(Responsive.padding(context, 16)),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [color, color.withOpacity(0.7)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          gradient: AppGradients.primaryGradient,
           borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.emerald.withOpacity(0.3),
+              blurRadius: 20,
+              spreadRadius: 2,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
         child: Row(
           children: [
-            // Book Icon
             Container(
               width: Responsive.width(context, 60),
               height: Responsive.height(context, 80),
@@ -177,7 +176,6 @@ class _BooksHomeScreenState extends State<BooksHomeScreen> {
               ),
             ),
             const SizedBox(width: 12),
-            // Book Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,7 +245,7 @@ class _BooksHomeScreenState extends State<BooksHomeScreen> {
     );
   }
 
-  Widget _buildBooksGrid() {
+  Widget _buildBooksGrid(BuildContext context) {
     if (_filteredBooks.isEmpty) {
       return Center(
         child: Column(
@@ -263,7 +261,7 @@ class _BooksHomeScreenState extends State<BooksHomeScreen> {
               'No books in this category',
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey.shade500,
+                color: context.textSecondaryColor,
               ),
             ),
           ],
@@ -272,25 +270,23 @@ class _BooksHomeScreenState extends State<BooksHomeScreen> {
     }
 
     return GridView.builder(
-      padding: EdgeInsets.symmetric(
-        horizontal: Responsive.padding(context, 16),
-        vertical: Responsive.padding(context, 8),
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: Responsive.gridColumns(context),
-        crossAxisSpacing: Responsive.padding(context, 12),
-        mainAxisSpacing: Responsive.padding(context, 12),
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
         childAspectRatio: 0.8,
       ),
       itemCount: _filteredBooks.length,
       itemBuilder: (context, index) {
         final book = _filteredBooks[index];
-        return _buildBookCard(book);
+        return _buildBookCard(context, book);
       },
     );
   }
 
-  Widget _buildBookCard(Book book) {
+  Widget _buildBookCard(BuildContext context, Book book) {
+
     final color = Color(int.parse(book.coverColor.replaceFirst('#', 'FF'), radix: 16));
 
     return GestureDetector(
@@ -303,13 +299,13 @@ class _BooksHomeScreenState extends State<BooksHomeScreen> {
         );
       },
       child: Container(
-        padding: EdgeInsets.all(Responsive.padding(context, 12)),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.08),
+              color: Colors.grey.withOpacity(context.isDarkMode ? 0.1 : 0.08),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -318,7 +314,7 @@ class _BooksHomeScreenState extends State<BooksHomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Book Cover
+
             Container(
               height: Responsive.height(context, 80),
               width: double.infinity,
@@ -338,37 +334,34 @@ class _BooksHomeScreenState extends State<BooksHomeScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            // Book Title
             Text(
               book.title,
               style: TextStyle(
                 fontSize: Responsive.fontSize(context, 14),
                 fontWeight: FontWeight.w600,
-                color: AppColors.deepForest,
+                color: context.textColor,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 2),
-            // Author
             Text(
               book.author,
               style: TextStyle(
                 fontSize: Responsive.fontSize(context, 11),
-                color: AppColors.textSecondary,
+                color: context.textSecondaryColor,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 4),
-            // Category + Progress
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AppColors.lightMint,
+                    color: context.isDarkMode ? AppColors.darkCard : AppColors.lightMint,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
@@ -397,7 +390,7 @@ class _BooksHomeScreenState extends State<BooksHomeScreen> {
                 child: LinearProgressIndicator(
                   value: book.progress,
                   minHeight: 3,
-                  backgroundColor: Colors.grey.shade200,
+                  backgroundColor: context.isDarkMode ? AppColors.darkCard : Colors.grey.shade200,
                   valueColor: const AlwaysStoppedAnimation<Color>(AppColors.emerald),
                 ),
               ),

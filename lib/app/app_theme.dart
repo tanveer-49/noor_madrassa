@@ -119,7 +119,12 @@ class AppTheme {
       ),
       bodyMedium: GoogleFonts.inter(
         fontSize: 14,
-        color: const Color(0xFFAAAAAA),
+        color: Colors.grey.shade400,
+      ),
+      labelLarge: GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: AppColors.white,
       ),
     ),
 
@@ -128,6 +133,19 @@ class AppTheme {
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
+      ),
+    ),
+
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: AppColors.darkCard,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      contentPadding: const EdgeInsets.all(16),
+      hintStyle: GoogleFonts.inter(
+        color: Colors.grey.shade500,
       ),
     ),
   );

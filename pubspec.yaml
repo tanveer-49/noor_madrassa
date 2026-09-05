@@ -28,7 +28,7 @@ dependencies:
   sqflite: ^2.3.0
 
   # Utilities
-  intl: ^0.18.1
+  intl: ^0.19.0
   url_launcher: ^6.2.1
   share_plus: ^7.2.1
 
@@ -38,21 +38,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^3.0.1
 
 flutter:
   uses-material-design: true
 
-  # Assets - Sirf images folder rakho
+  # Assets
   assets:
     - assets/images/splash_logo.png
     - assets/images/
     - assets/icons/
-
-  # FONTS COMPLETELY REMOVE KAREIN (Jab tak fonts download nahi karte)
-  # fonts:
-  #   - family: Inter
-  #     fonts:
-  #       - asset: assets/fonts/Inter-Regular.ttf
-  #         weight: 400
