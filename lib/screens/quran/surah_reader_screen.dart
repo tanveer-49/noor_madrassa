@@ -4,6 +4,9 @@ import 'package:noor_madrassa/app/app_colors.dart';
 import 'package:noor_madrassa/data/quran_data.dart';
 import 'package:noor_madrassa/models/surah_model.dart';
 import 'package:noor_madrassa/models/verse_model.dart';
+import 'package:noor_madrassa/models/audio_model.dart';  // ✅ Added
+import 'package:noor_madrassa/screens/audio/audio_player_screen.dart';  // ✅ Added
+import 'package:noor_madrassa/utils/theme_extensions.dart';  // ✅ Added
 
 class SurahReaderScreen extends StatefulWidget {
   final Surah surah;
@@ -65,26 +68,32 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.isDarkMode;
+
     return Scaffold(
-      backgroundColor: AppColors.warmCream,
+      backgroundColor: context.backgroundColor,  // ✅ Dynamic
       appBar: AppBar(
         title: Column(
           children: [
             Text(
               widget.surah.nameArabic,
-              style: const TextStyle(fontSize: 18),
+              style: TextStyle(
+                fontSize: 18,
+                color: context.textColor,  // ✅ Dynamic
+              ),
             ),
             Text(
               widget.surah.nameEnglish,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
-                color: AppColors.textSecondary,
+                color: context.textSecondaryColor,  // ✅ Dynamic
               ),
             ),
           ],
         ),
-        backgroundColor: AppColors.warmCream,
+        backgroundColor: context.backgroundColor,  // ✅ Dynamic
         elevation: 0,
+        iconTheme: IconThemeData(color: context.textColor),  // ✅ Dynamic
         actions: [
           IconButton(
             icon: const Icon(Icons.bookmark_border),
@@ -101,7 +110,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              _showReaderSettings();
+              _showReaderSettings(context, isDark);
             },
           ),
         ],
@@ -109,9 +118,12 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
       body: Column(
         children: [
           // Reader Controls
-          _buildReaderControls(),
+          _buildReaderControls(context, isDark),
 
-          const Divider(height: 1),
+          Divider(
+            height: 1,
+            color: isDark ? Colors.grey.shade800 : Colors.grey.shade200,
+          ),
 
           // Verses
           Expanded(
@@ -120,7 +132,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
               itemCount: verses.length,
               itemBuilder: (context, index) {
                 final verse = verses[index];
-                return _buildVerseCard(verse);
+                return _buildVerseCard(context, isDark, verse);
               },
             ),
           ),
@@ -129,10 +141,10 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
     );
   }
 
-  Widget _buildReaderControls() {
+  Widget _buildReaderControls(BuildContext context, bool isDark) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      color: AppColors.white,
+      color: isDark ? AppColors.darkCard : AppColors.white,  // ✅ Dynamic
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -140,7 +152,11 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
           Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.remove, size: 20),
+                icon: Icon(
+                  Icons.remove,
+                  size: 20,
+                  color: context.textColor,  // ✅ Dynamic
+                ),
                 onPressed: () {
                   setState(() {
                     if (_fontSize > 16) _fontSize -= 2;
@@ -149,10 +165,17 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
               ),
               Text(
                 '${_fontSize.toInt()}',
-                style: const TextStyle(fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: context.textColor,  // ✅ Dynamic
+                ),
               ),
               IconButton(
-                icon: const Icon(Icons.add, size: 20),
+                icon: Icon(
+                  Icons.add,
+                  size: 20,
+                  color: context.textColor,  // ✅ Dynamic
+                ),
                 onPressed: () {
                   setState(() {
                     if (_fontSize < 32) _fontSize += 2;
@@ -162,7 +185,11 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
             ],
           ),
 
-          Container(height: 30, width: 1, color: Colors.grey[300]),
+          Container(
+            height: 30,
+            width: 1,
+            color: isDark ? Colors.grey.shade700 : Colors.grey[300],
+          ),
 
           // Toggle Translation
           GestureDetector(
@@ -175,13 +202,17 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
               children: [
                 Icon(
                   _showTranslation ? Icons.translate : Icons.translate_outlined,
-                  color: _showTranslation ? AppColors.emerald : AppColors.textSecondary,
+                  color: _showTranslation
+                      ? AppColors.emerald
+                      : context.textSecondaryColor,  // ✅ Dynamic
                 ),
                 const SizedBox(width: 4),
                 Text(
                   'Translation',
                   style: TextStyle(
-                    color: _showTranslation ? AppColors.emerald : AppColors.textSecondary,
+                    color: _showTranslation
+                        ? AppColors.emerald
+                        : context.textSecondaryColor,  // ✅ Dynamic
                     fontSize: 12,
                   ),
                 ),
@@ -189,12 +220,16 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
             ),
           ),
 
-          Container(height: 30, width: 1, color: Colors.grey[300]),
+          Container(
+            height: 30,
+            width: 1,
+            color: isDark ? Colors.grey.shade700 : Colors.grey[300],
+          ),
 
-          // Audio
+          // ✅ Audio - Working
           GestureDetector(
             onTap: () {
-              // Play audio
+              _playAudio(context);
             },
             child: const Row(
               children: [
@@ -215,16 +250,39 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
     );
   }
 
-  Widget _buildVerseCard(Verse verse) {
+  // ✅ Play Audio Function
+  void _playAudio(BuildContext context) {
+    // Create audio track from surah
+    final track = AudioTrack(
+      id: widget.surah.id.toString(),
+      title: widget.surah.nameEnglish,
+      titleArabic: widget.surah.nameArabic,
+      reciter: 'Mishary Rashid Alafasy',
+      reciterArabic: 'مشاري راشد العفاسي',
+      surahName: widget.surah.nameEnglish,
+      surahNumber: widget.surah.id,
+      audioUrl: 'https://example.com/audio/${widget.surah.id}.mp3',
+      duration: Duration(minutes: 5 + widget.surah.id),
+    );
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AudioPlayerScreen(track: track),
+      ),
+    );
+  }
+
+  Widget _buildVerseCard(BuildContext context, bool isDark, Verse verse) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: isDark ? AppColors.darkCard : AppColors.white,  // ✅ Dynamic
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.05),
+            color: Colors.grey.withOpacity(isDark ? 0.1 : 0.05),
             blurRadius: 5,
             offset: const Offset(0, 2),
           ),
@@ -240,7 +298,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.lightMint,
+                  color: isDark ? AppColors.darkBackground : AppColors.lightMint,  // ✅ Dynamic
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -255,13 +313,21 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
               Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.bookmark_border, size: 20),
+                    icon: Icon(
+                      Icons.bookmark_border,
+                      size: 20,
+                      color: context.textSecondaryColor,  // ✅ Dynamic
+                    ),
                     onPressed: () {
                       // Bookmark verse
                     },
                   ),
                   IconButton(
-                    icon: const Icon(Icons.share, size: 20),
+                    icon: Icon(
+                      Icons.share,
+                      size: 20,
+                      color: context.textSecondaryColor,  // ✅ Dynamic
+                    ),
                     onPressed: () {
                       // Share verse
                     },
@@ -280,7 +346,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
             style: TextStyle(
               fontSize: _fontSize,
               fontFamily: 'Uthmanic',
-              color: AppColors.deepForest,
+              color: isDark ? AppColors.white : AppColors.deepForest,  // ✅ Dynamic
               height: 2.0,
               letterSpacing: 1,
             ),
@@ -293,7 +359,7 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.lightMint,
+                color: isDark ? AppColors.darkBackground : AppColors.lightMint,  // ✅ Dynamic
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
@@ -301,18 +367,18 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
                 children: [
                   Text(
                     verse.translation,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
-                      color: AppColors.textPrimary,
+                      color: context.textColor,  // ✅ Dynamic
                       height: 1.6,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     verse.transliteration,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
-                      color: AppColors.textSecondary,
+                      color: context.textSecondaryColor,  // ✅ Dynamic
                       fontStyle: FontStyle.italic,
                     ),
                   ),
@@ -325,96 +391,115 @@ class _SurahReaderScreenState extends State<SurahReaderScreen> {
     );
   }
 
-  void _showReaderSettings() {
+  void _showReaderSettings(BuildContext context, bool isDark) {
     showModalBottomSheet(
       context: context,
+      backgroundColor: isDark ? AppColors.darkCard : AppColors.white,  // ✅ Dynamic
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Reader Settings',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20),
-              // Font Size
-              const Text('Font Size'),
-              Slider(
-                value: _fontSize,
-                min: 16,
-                max: 32,
-                divisions: 8,
-                label: _fontSize.toInt().toString(),
-                onChanged: (value) {
-                  setState(() {
-                    _fontSize = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              // Translation Toggle
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Show Translation'),
-                  Switch(
-                    value: _showTranslation,
-                    onChanged: (value) {
-                      setState(() {
-                        _showTranslation = value;
-                      });
-                    },
+                  Text(
+                    'Reader Settings',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: context.textColor,  // ✅ Dynamic
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Font Size
+                  Text(
+                    'Font Size',
+                    style: TextStyle(
+                      color: context.textColor,  // ✅ Dynamic
+                    ),
+                  ),
+                  Slider(
+                    value: _fontSize,
+                    min: 16,
+                    max: 32,
+                    divisions: 8,
+                    label: _fontSize.toInt().toString(),
                     activeColor: AppColors.emerald,
+                    onChanged: (value) {
+                      setModalState(() {
+                        _fontSize = value;
+                      });
+                      setState(() {});
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  // Translation Toggle
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Show Translation',
+                        style: TextStyle(
+                          color: context.textColor,  // ✅ Dynamic
+                        ),
+                      ),
+                      Switch(
+                        value: _showTranslation,
+                        onChanged: (value) {
+                          setModalState(() {
+                            _showTranslation = value;
+                          });
+                          setState(() {});
+                        },
+                        activeColor: AppColors.emerald,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            side: const BorderSide(color: AppColors.emerald),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text('Cancel'),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.emerald,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text('Apply'),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        side: const BorderSide(color: AppColors.emerald),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text('Cancel'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.emerald,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text('Apply'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

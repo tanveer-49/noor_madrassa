@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'app/app_theme.dart';
 import 'services/theme_service.dart';
+import 'services/audio_service.dart';
 import 'screens/splash_screen.dart';
 
 void main() async {
@@ -12,6 +13,7 @@ void main() async {
 
 
   Get.put(ThemeService());
+  Get.put(AudioService());
 
   runApp(const NoorMadrassaApp());
 }

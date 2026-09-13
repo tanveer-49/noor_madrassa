@@ -5,7 +5,9 @@ import 'package:noor_madrassa/screens/quran/quran_home_screen.dart';
 import 'package:noor_madrassa/screens/hadith/hadith_home_screen.dart';
 import 'package:noor_madrassa/screens/library/books_home_screen.dart';
 import 'package:noor_madrassa/screens/profile/profile_screen.dart';
+import 'package:noor_madrassa/screens/courses/courses_home_screen.dart';
 import 'package:noor_madrassa/widgets/bottom_nav.dart';
+import 'package:noor_madrassa/widgets/mini_audio_player.dart';
 import 'package:noor_madrassa/utils/theme_extensions.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,19 +32,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _screens[_currentIndex],
-      bottomNavigationBar: CustomBottomNav(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const MiniAudioPlayer(),
+          CustomBottomNav(
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
+        ],
       ),
     );
   }
 }
 
-// Home Content Widget -
+// Home Content Widget
 class HomeContent extends StatelessWidget {
   const HomeContent({super.key});
 
@@ -97,7 +105,7 @@ class HomeContent extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // Hero Card -
+              // Hero Card
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -193,16 +201,65 @@ class HomeContent extends StatelessWidget {
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 12,
                 children: [
-                  _buildQuickAction(context, Icons.menu_book, 'Qur\'an'),
-                  _buildQuickAction(context, Icons.chrome_reader_mode, 'Hadith'),
-                  _buildQuickAction(context, Icons.local_library, 'Duas'),
-                  _buildQuickAction(context, Icons.school, 'Courses'),
+                  _buildQuickAction(
+                    context,
+                    Icons.menu_book,
+                    'Qur\'an',
+                        () {
+                      // Navigate to Qur'an tab
+                      final homeState = context.findAncestorStateOfType<_HomeScreenState>();
+                      if (homeState != null) {
+                        homeState.setState(() {
+                          homeState._currentIndex = 1;
+                        });
+                      }
+                    },
+                  ),
+                  _buildQuickAction(
+                    context,
+                    Icons.chrome_reader_mode,
+                    'Hadith',
+                        () {
+                      // Navigate to Hadith tab
+                      final homeState = context.findAncestorStateOfType<_HomeScreenState>();
+                      if (homeState != null) {
+                        homeState.setState(() {
+                          homeState._currentIndex = 2;
+                        });
+                      }
+                    },
+                  ),
+                  _buildQuickAction(
+                    context,
+                    Icons.local_library,
+                    'Duas',
+                        () {
+                      // TODO: Navigate to Duas Screen
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Duas feature coming soon!')),
+                      );
+                    },
+                  ),
+                  _buildQuickAction(
+                    context,
+                    Icons.school,
+                    'Courses',
+                        () {
+                      // ✅ Navigate to Courses Screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CoursesHomeScreen(),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
 
               const SizedBox(height: 24),
 
-              // Daily Ayah -
+              // Daily Ayah
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -263,7 +320,7 @@ class HomeContent extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // Madrassa Progress -
+              // Madrassa Progress
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -334,15 +391,21 @@ class HomeContent extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickAction(BuildContext context, IconData icon, String label) {
+  // ✅ Updated Quick Action with onTap
+  Widget _buildQuickAction(
+      BuildContext context,
+      IconData icon,
+      String label,
+      VoidCallback onTap,
+      ) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Column(
         children: [
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: context.cardColor,  //
+              color: context.cardColor,
               borderRadius: BorderRadius.circular(14),
               boxShadow: [
                 BoxShadow(
