@@ -6,6 +6,8 @@ import 'package:noor_madrassa/screens/hadith/hadith_home_screen.dart';
 import 'package:noor_madrassa/screens/library/books_home_screen.dart';
 import 'package:noor_madrassa/screens/profile/profile_screen.dart';
 import 'package:noor_madrassa/screens/courses/courses_home_screen.dart';
+import 'package:noor_madrassa/screens/search/search_screen.dart';
+import 'package:noor_madrassa/screens/bookmarks/bookmarks_screen.dart';
 import 'package:noor_madrassa/widgets/bottom_nav.dart';
 import 'package:noor_madrassa/widgets/mini_audio_player.dart';
 import 'package:noor_madrassa/utils/theme_extensions.dart';
@@ -66,38 +68,95 @@ class HomeContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top Bar
+              // ✅ Top Bar - Updated with Search + Bookmark
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Assalamu Alaikum! 👋',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: context.textColor,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Assalamu Alaikum! 👋',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: context.textColor,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Wednesday, 3 September 2026',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: context.textSecondaryColor,
+                        const SizedBox(height: 4),
+                        Text(
+                          'Wednesday, 3 September 2026',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: context.textSecondaryColor,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundColor: AppColors.emerald,
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 28,
+                  const SizedBox(width: 8),
+                  // ✅ Search Icon
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SearchScreen(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: context.cardColor,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(isDark ? 0.1 : 0.05),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        Icons.search,
+                        color: context.textColor,
+                        size: 22,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // ✅ Bookmark Icon
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const BookmarksScreen(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: context.cardColor,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(isDark ? 0.1 : 0.05),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        Icons.bookmark_border,
+                        color: context.textColor,
+                        size: 22,
+                      ),
                     ),
                   ),
                 ],
@@ -206,7 +265,6 @@ class HomeContent extends StatelessWidget {
                     Icons.menu_book,
                     'Qur\'an',
                         () {
-                      // Navigate to Qur'an tab
                       final homeState = context.findAncestorStateOfType<_HomeScreenState>();
                       if (homeState != null) {
                         homeState.setState(() {
@@ -220,7 +278,6 @@ class HomeContent extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     'Hadith',
                         () {
-                      // Navigate to Hadith tab
                       final homeState = context.findAncestorStateOfType<_HomeScreenState>();
                       if (homeState != null) {
                         homeState.setState(() {
@@ -234,7 +291,6 @@ class HomeContent extends StatelessWidget {
                     Icons.local_library,
                     'Duas',
                         () {
-                      // TODO: Navigate to Duas Screen
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Duas feature coming soon!')),
                       );
@@ -245,7 +301,6 @@ class HomeContent extends StatelessWidget {
                     Icons.school,
                     'Courses',
                         () {
-                      // ✅ Navigate to Courses Screen
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -391,7 +446,7 @@ class HomeContent extends StatelessWidget {
     );
   }
 
-  // ✅ Updated Quick Action with onTap
+  // ✅ Quick Action with onTap
   Widget _buildQuickAction(
       BuildContext context,
       IconData icon,
@@ -428,6 +483,8 @@ class HomeContent extends StatelessWidget {
               fontSize: 12,
               color: context.textSecondaryColor,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -463,6 +520,8 @@ class HomeContent extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: context.textColor,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   subtitle,
@@ -470,6 +529,8 @@ class HomeContent extends StatelessWidget {
                     fontSize: 12,
                     color: context.textSecondaryColor,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),

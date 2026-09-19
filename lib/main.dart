@@ -6,6 +6,8 @@ import 'app/app_theme.dart';
 import 'services/theme_service.dart';
 import 'services/audio_service.dart';
 import 'screens/splash_screen.dart';
+import 'services/search_service.dart';
+import 'services/bookmark_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +16,8 @@ void main() async {
 
   Get.put(ThemeService());
   Get.put(AudioService());
-
+  Get.put(SearchService());
+  Get.put(BookmarkService());
   runApp(const NoorMadrassaApp());
 }
 

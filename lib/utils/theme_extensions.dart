@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import '../app/app_colors.dart';
 
-extension ThemeExtension on BuildContext {
+
+extension ContextExtensions on BuildContext {
   Color get backgroundColor => Theme.of(this).scaffoldBackgroundColor;
   Color get cardColor => Theme.of(this).cardColor;
   Color get primaryColor => Theme.of(this).primaryColor;
@@ -11,7 +12,6 @@ extension ThemeExtension on BuildContext {
 
   bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
 }
-
 
 class AppGradients {
   static const LinearGradient primaryGradient = LinearGradient(
