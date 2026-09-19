@@ -15,7 +15,7 @@
 
 ## About
 
-**Noor Madrassa** is a modern Islamic learning companion designed for Madrassa students and general users. It combines Qur'an reading, Hadith collections, Islamic books, Madrassa courses, audio recitation, search, and bookmarks in one calm and easy-to-use experience.
+**Noor Madrassa** is a modern Islamic learning companion designed for Madrassa students and general users. It combines Qur'an reading, Hadith collections, Islamic books, Madrassa courses, audio recitation, search, bookmarks, Duas, and achievements in one calm and easy-to-use experience.
 
 **Core Design Principles:**
 
@@ -44,6 +44,8 @@
 | Audio Player | Done | Full player + mini player |
 | Search Functionality | Done | Global search across all content |
 | Bookmarks | Done | Save and organize favorite content |
+| Duas & Azkar | Done | Morning/evening, prayer, travel, protection duas |
+| Certificates & Badges | Done | Achievement system with badges and certificates |
 | Profile & Progress | Done | User profile, stats, progress |
 | Settings Module | Done | Theme (Light/Dark/System) |
 | Dark/Light Mode | Done | Complete dark theme across all screens |
@@ -55,13 +57,11 @@
 
 | Feature | Priority | Description |
 |---------|----------|-------------|
-| Duas & Azkar | Medium | Morning/evening duas, prayer duas |
+| Settings Full | Medium | Language, Font Size, Audio Settings |
 | Quiz/Assessment | Medium | Full lesson quizzes |
-| Certificates/Badges | Low | Achievement system |
 | Push Notifications | Low | Daily reminders and updates |
 | Multi-language | Low | English, Urdu, Arabic support |
 | Offline Support | Low | Download content for offline use |
-| Settings Full | Medium | Language, Font Size, Audio |
 
 ---
 
@@ -146,7 +146,23 @@
 - Empty State: With action
 - Delete Bookmark: Swipe/button
 
-### 12. Profile Module
+### 12. Duas & Azkar Module
+
+- Duas Home: Featured Dua, Category Chips
+- 8 Categories: Morning, Evening, Prayer, Travel, Protection, Forgiveness, Gratitude, Daily
+- 15 Duas with Arabic, Transliteration, Translation
+- Favorites: Toggle and save
+- Dua Detail: Large Arabic, Font Size Control, Share, Save
+
+### 13. Certificates & Badges Module
+
+- Achievements Screen: Stats, Tab Selector (Badges/Certificates)
+- 15 Badges across 6 types (Qur'an, Hadith, Course, Streak, Bookmark, Special)
+- 3 Certificates with premium design
+- Progress tracking for in-progress badges
+- Certificate Detail: Premium card, Course Details, Share/Download
+
+### 14. Profile Module
 
 - Profile Header: Avatar with name and email
 - Stats Cards: Day Streak, Lessons, Certificates
@@ -154,7 +170,7 @@
 - Recent Activity: Feed
 - Quick Actions: Bookmarks, Achievements, Statistics
 
-### 13. Settings Module
+### 15. Settings Module
 
 - User Summary: Profile preview
 - Theme: Light/Dark/System (Working)
@@ -216,13 +232,12 @@
 | Dart | Programming Language |
 | GetX | State Management & Navigation |
 | Google Fonts | Typography |
-| Get Storage | Local Storage (Theme, Search) |
+| Get Storage | Local Storage (Theme, Search, Favorites) |
 | Just Audio | Audio playback |
 | Shimmer | Loading animations |
 | Flutter SVG | SVG support |
 
 ---
-
 
 ---
 

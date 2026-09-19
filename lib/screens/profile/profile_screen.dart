@@ -4,9 +4,10 @@ import 'package:noor_madrassa/app/app_colors.dart';
 import 'package:noor_madrassa/data/user_data.dart';
 import 'package:noor_madrassa/models/user_model.dart';
 import 'package:noor_madrassa/screens/profile/settings_screen.dart';
+import 'package:noor_madrassa/screens/bookmarks/bookmarks_screen.dart';
+import 'package:noor_madrassa/screens/achievements/achievements_screen.dart';
 import 'package:noor_madrassa/utils/responsive.dart';
 import 'package:noor_madrassa/utils/theme_extensions.dart';
-
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -422,52 +423,98 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-
   Widget _buildQuickActions(BuildContext context) {
+
     return Row(
       children: [
-        _buildQuickActionItem(context, '📖', 'Bookmarks', () {}),
+        Expanded(
+          child: _buildQuickActionItem(
+            context,
+            '🔖',
+            'Bookmarks',
+                () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const BookmarksScreen(),
+                ),
+              );
+            },
+          ),
+        ),
         SizedBox(width: Responsive.padding(context, 12)),
-        _buildQuickActionItem(context, '🏆', 'Achievements', () {}),
+        Expanded(
+          child: _buildQuickActionItem(
+            context,
+            '🏆',
+            'Achievements',
+                () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AchievementsScreen(),
+                ),
+              );
+            },
+          ),
+        ),
         SizedBox(width: Responsive.padding(context, 12)),
-        _buildQuickActionItem(context, '📊', 'Statistics', () {}),
+        Expanded(
+          child: _buildQuickActionItem(
+            context,
+            '📊',
+            'Statistics',
+                () {
+              // TODO: Statistics screen
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Statistics coming soon!')),
+              );
+            },
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildQuickActionItem(BuildContext context, String icon, String label, VoidCallback onTap) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: EdgeInsets.all(Responsive.padding(context, 12)),
-          decoration: BoxDecoration(
-            color: context.cardColor,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(context.isDarkMode ? 0.1 : 0.05),
-                blurRadius: 5,
-                offset: const Offset(0, 2),
+  Widget _buildQuickActionItem(
+      BuildContext context,
+      String icon,
+      String label,
+      VoidCallback onTap,
+      ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(Responsive.padding(context, 12)),
+        decoration: BoxDecoration(
+          color: context.cardColor,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(context.isDarkMode ? 0.1 : 0.05),
+              blurRadius: 5,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Text(
+              icon,
+              style: TextStyle(fontSize: Responsive.fontSize(context, 24)),
+            ),
+            SizedBox(height: Responsive.height(context, 4)),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: Responsive.fontSize(context, 11),
+                color: context.textSecondaryColor,
               ),
-            ],
-          ),
-          child: Column(
-            children: [
-              Text(
-                icon,
-                style: TextStyle(fontSize: Responsive.fontSize(context, 24)),
-              ),
-              SizedBox(height: Responsive.height(context, 4)),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: Responsive.fontSize(context, 11),
-                  color: context.textSecondaryColor,
-                ),
-              ),
-            ],
-          ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );

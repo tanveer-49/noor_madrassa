@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:noor_madrassa/app/app_colors.dart';
+import 'package:noor_madrassa/data/bookmarks_data.dart';
 import 'package:noor_madrassa/models/bookmark_model.dart';
 import 'package:noor_madrassa/services/bookmark_service.dart';
 import 'package:noor_madrassa/utils/responsive.dart';
@@ -129,7 +130,6 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
 
     return GestureDetector(
       onTap: () {
-        // Navigate to detail
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Opening: ${bookmark.title}')),
         );
@@ -153,7 +153,6 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
           children: [
             Row(
               children: [
-                // Type Icon
                 Container(
                   width: Responsive.width(context, 40),
                   height: Responsive.width(context, 40),
@@ -195,7 +194,6 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                     ],
                   ),
                 ),
-                // Delete Button
                 IconButton(
                   icon: Icon(
                     Icons.bookmark,
@@ -274,7 +272,6 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     );
   }
 
-  // ✅ Empty State
   Widget _buildEmptyState(BuildContext context, bool isDark) {
     return Center(
       child: Padding(

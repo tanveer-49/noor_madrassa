@@ -8,7 +8,8 @@ import 'services/audio_service.dart';
 import 'screens/splash_screen.dart';
 import 'services/search_service.dart';
 import 'services/bookmark_service.dart';
-
+import 'services/dua_service.dart';
+import 'services/achievement_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
@@ -19,6 +20,8 @@ void main() async {
   Get.put(SearchService());
   Get.put(BookmarkService());
   runApp(const NoorMadrassaApp());
+  Get.put(DuaService());
+  Get.put(AchievementService());
 }
 
 class NoorMadrassaApp extends StatelessWidget {

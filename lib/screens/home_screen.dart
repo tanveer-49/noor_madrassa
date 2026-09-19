@@ -11,6 +11,7 @@ import 'package:noor_madrassa/screens/bookmarks/bookmarks_screen.dart';
 import 'package:noor_madrassa/widgets/bottom_nav.dart';
 import 'package:noor_madrassa/widgets/mini_audio_player.dart';
 import 'package:noor_madrassa/utils/theme_extensions.dart';
+import 'package:noor_madrassa/screens/duas/duas_home_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -68,7 +69,6 @@ class HomeContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ✅ Top Bar - Updated with Search + Bookmark
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -98,7 +98,7 @@ class HomeContent extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  // ✅ Search Icon
+
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -129,7 +129,7 @@ class HomeContent extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  // ✅ Bookmark Icon
+
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -309,6 +309,19 @@ class HomeContent extends StatelessWidget {
                       );
                     },
                   ),
+                  _buildQuickAction(
+                    context,
+                    Icons.local_library,
+                    'Duas',
+                        () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DuasHomeScreen(),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
 
@@ -446,7 +459,7 @@ class HomeContent extends StatelessWidget {
     );
   }
 
-  // ✅ Quick Action with onTap
+
   Widget _buildQuickAction(
       BuildContext context,
       IconData icon,
