@@ -10,10 +10,12 @@ class NotificationSettingsScreen extends StatefulWidget {
   const NotificationSettingsScreen({super.key});
 
   @override
-  State<NotificationSettingsScreen> createState() => _NotificationSettingsScreenState();
+  State<NotificationSettingsScreen> createState() =>
+      _NotificationSettingsScreenState();
 }
 
-class _NotificationSettingsScreenState extends State<NotificationSettingsScreen> {
+class _NotificationSettingsScreenState
+    extends State<NotificationSettingsScreen> {
   final NotificationService _notificationService = Get.find();
 
   @override
@@ -74,7 +76,8 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                   'Prayer Reminders',
                   'Get notified for prayer times',
                   _notificationService.settings.value.prayerRemindersEnabled,
-                      (value) => _notificationService.togglePrayerReminders(value),
+                      (value) =>
+                      _notificationService.togglePrayerReminders(value),
                 ),
                 _buildSwitchItem(
                   context,
@@ -83,7 +86,8 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                   'Streak Reminders',
                   'Keep your learning streak alive',
                   _notificationService.settings.value.streakRemindersEnabled,
-                      (value) => _notificationService.toggleStreakReminders(value),
+                      (value) =>
+                      _notificationService.toggleStreakReminders(value),
                 ),
               ],
             ),
@@ -103,7 +107,8 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                   'Lesson Reminders',
                   'Remind me to continue lessons',
                   _notificationService.settings.value.lessonRemindersEnabled,
-                      (value) => _notificationService.toggleLessonReminders(value),
+                      (value) =>
+                      _notificationService.toggleLessonReminders(value),
                 ),
                 _buildSwitchItem(
                   context,
@@ -131,7 +136,8 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                   '📖',
                   'Daily Ayah Time',
                   _notificationService.settings.value.dailyAyahTime,
-                      (time) => _notificationService.updateDailyAyahTime(time),
+                      (time) =>
+                      _notificationService.updateDailyAyahTime(time),
                 ),
                 _buildTimeItem(
                   context,
@@ -139,7 +145,8 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                   '📚',
                   'Daily Hadith Time',
                   _notificationService.settings.value.dailyHadithTime,
-                      (time) => _notificationService.updateDailyHadithTime(time),
+                      (time) =>
+                      _notificationService.updateDailyHadithTime(time),
                 ),
               ],
             ),
@@ -183,6 +190,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
     );
   }
 
+  // ==================== SECTION BUILDER ====================
   Widget _buildSection(
       BuildContext context,
       bool isDark,
@@ -220,6 +228,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
     );
   }
 
+  // ==================== SWITCH ITEM BUILDER ====================
   Widget _buildSwitchItem(
       BuildContext context,
       bool isDark,
@@ -244,7 +253,10 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       ),
       child: Row(
         children: [
-          Text(emoji, style: TextStyle(fontSize: Responsive.fontSize(context, 20))),
+          Text(
+            emoji,
+            style: TextStyle(fontSize: Responsive.fontSize(context, 20)),
+          ),
           SizedBox(width: Responsive.padding(context, 14)),
           Expanded(
             child: Column(
@@ -278,6 +290,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
     );
   }
 
+  // ==================== TIME ITEM BUILDER ====================
   Widget _buildTimeItem(
       BuildContext context,
       bool isDark,
@@ -300,7 +313,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
           builder: (context, child) {
             return Theme(
               data: Theme.of(context).copyWith(
-                colorScheme: ColorScheme.light(
+                colorScheme: const ColorScheme.light(
                   primary: AppColors.emerald,
                 ),
               ),
@@ -310,7 +323,8 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         );
 
         if (picked != null) {
-          final formatted = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+          final formatted =
+              '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
           onTimeChanged(formatted);
           setState(() {});
         }
@@ -330,7 +344,10 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
         ),
         child: Row(
           children: [
-            Text(emoji, style: TextStyle(fontSize: Responsive.fontSize(context, 20))),
+            Text(
+              emoji,
+              style: TextStyle(fontSize: Responsive.fontSize(context, 20)),
+            ),
             SizedBox(width: Responsive.padding(context, 14)),
             Expanded(
               child: Text(

@@ -6,6 +6,7 @@ import 'package:noor_madrassa/data/user_data.dart';
 import 'package:noor_madrassa/services/theme_service.dart';
 import 'package:noor_madrassa/services/font_size_service.dart';
 import 'package:noor_madrassa/services/language_service.dart';
+import 'package:noor_madrassa/screens/notifications/notification_settings_screen.dart';
 import 'package:noor_madrassa/utils/responsive.dart';
 import 'package:noor_madrassa/utils/theme_extensions.dart';
 
@@ -64,19 +65,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             // Content Section
             _buildSettingsSection(context, isDark, 'Content', [
+              // Translation Language
               _buildSettingsItem(
-                context, isDark,
+                context,
+                isDark,
                 Icons.translate,
                 'Translation Language',
                 'English',
                     () => _showComingSoon(context, isDark, 'Translation Language'),
               ),
+
               _buildSettingsItem(
-                context, isDark,
+                context,
+                isDark,
                 Icons.notifications,
                 'Notifications',
-                'On',
-                    () => _showComingSoon(context, isDark, 'Notifications'),
+                'Manage notification preferences',
+                    () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NotificationSettingsScreen(),
+                    ),
+                  );
+                },
               ),
             ]),
 
@@ -85,7 +97,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             // Support Section
             _buildSettingsSection(context, isDark, 'Support', [
               _buildSettingsItem(
-                context, isDark,
+                context,
+                isDark,
                 Icons.cloud_download,
                 'Downloaded Content',
                 '12 items',
@@ -306,7 +319,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-
   Widget _buildLanguageSetting(BuildContext context, bool isDark) {
     return GestureDetector(
       onTap: () => _showLanguageDialog(context, isDark),
@@ -364,7 +376,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  // ✅ THEME SETTING - WORKING
   Widget _buildThemeSetting(BuildContext context, bool isDark) {
     return GestureDetector(
       onTap: () => _showThemeDialog(context, isDark),
@@ -520,7 +531,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-
   void _showLanguageDialog(BuildContext context, bool isDark) {
     showModalBottomSheet(
       context: context,
@@ -584,7 +594,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-
   void _showThemeDialog(BuildContext context, bool isDark) {
     showModalBottomSheet(
       context: context,
@@ -640,7 +649,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       },
     );
   }
-
 
   void _showFontSizeDialog(BuildContext context, bool isDark) {
     showModalBottomSheet(

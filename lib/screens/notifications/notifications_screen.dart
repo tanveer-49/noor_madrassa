@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:noor_madrassa/app/app_colors.dart';
 import 'package:noor_madrassa/models/notification_model.dart';
 import 'package:noor_madrassa/services/notification_service.dart';
-import 'package:noor_madrassa/screens/notifications/notification_settings_screen.dart';
 import 'package:noor_madrassa/utils/responsive.dart';
 import 'package:noor_madrassa/utils/theme_extensions.dart';
 
@@ -67,18 +66,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-          // Settings
-          IconButton(
-            icon: Icon(Icons.settings, color: context.textColor),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const NotificationSettingsScreen(),
-                ),
-              );
-            },
-          ),
           // Mark All Read
           Obx(() => _notificationService.unreadCount > 0
               ? IconButton(
@@ -189,7 +176,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return GestureDetector(
       onTap: () {
         _notificationService.markAsRead(notification.id);
-        // Navigate based on actionId
         _handleNotificationTap(context, notification);
       },
       child: Container(
@@ -250,7 +236,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         Container(
                           width: 8,
                           height: 8,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: AppColors.emerald,
                             shape: BoxShape.circle,
                           ),
@@ -362,7 +348,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   void _handleNotificationTap(BuildContext context, AppNotification notification) {
-    // Navigate based on type
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Opening: ${notification.title}')),
     );
