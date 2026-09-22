@@ -10,6 +10,11 @@ import 'services/search_service.dart';
 import 'services/bookmark_service.dart';
 import 'services/dua_service.dart';
 import 'services/achievement_service.dart';
+import 'services/font_size_service.dart';
+import 'services/language_service.dart';
+import 'services/notification_service.dart';
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
@@ -22,6 +27,9 @@ void main() async {
   runApp(const NoorMadrassaApp());
   Get.put(DuaService());
   Get.put(AchievementService());
+  Get.put(FontSizeService());
+  Get.put(LanguageService());
+  Get.put(NotificationService());
 }
 
 class NoorMadrassaApp extends StatelessWidget {

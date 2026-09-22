@@ -1,5 +1,6 @@
 // lib/screens/home_screen.dart
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:noor_madrassa/app/app_colors.dart';
 import 'package:noor_madrassa/screens/quran/quran_home_screen.dart';
 import 'package:noor_madrassa/screens/hadith/hadith_home_screen.dart';
@@ -8,10 +9,12 @@ import 'package:noor_madrassa/screens/profile/profile_screen.dart';
 import 'package:noor_madrassa/screens/courses/courses_home_screen.dart';
 import 'package:noor_madrassa/screens/search/search_screen.dart';
 import 'package:noor_madrassa/screens/bookmarks/bookmarks_screen.dart';
+import 'package:noor_madrassa/screens/duas/duas_home_screen.dart';
+import 'package:noor_madrassa/screens/notifications/notifications_screen.dart';
+import 'package:noor_madrassa/services/notification_service.dart';
 import 'package:noor_madrassa/widgets/bottom_nav.dart';
 import 'package:noor_madrassa/widgets/mini_audio_player.dart';
 import 'package:noor_madrassa/utils/theme_extensions.dart';
-import 'package:noor_madrassa/screens/duas/duas_home_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -59,7 +62,7 @@ class HomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = context.isDarkMode;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: context.backgroundColor,
@@ -69,6 +72,7 @@ class HomeContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Top Bar - Greeting + Search + Bookmark + Notification
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -99,6 +103,7 @@ class HomeContent extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
 
+                  // Search Icon
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -130,6 +135,7 @@ class HomeContent extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
 
+                  // Bookmark Icon
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -156,6 +162,59 @@ class HomeContent extends StatelessWidget {
                         Icons.bookmark_border,
                         color: context.textColor,
                         size: 22,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+
+                  // ✅ Notification Icon with Badge
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationsScreen(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: context.cardColor,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(isDark ? 0.1 : 0.05),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          Icon(
+                            Icons.notifications_outlined,
+                            color: context.textColor,
+                            size: 22,
+                          ),
+                          // ✅ Unread Badge
+                          Obx(() {
+                            final count = Get.find<NotificationService>().unreadCount;
+                            if (count == 0) return const SizedBox.shrink();
+                            return Positioned(
+                              right: 0,
+                              top: 0,
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: AppColors.error,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            );
+                          }),
+                        ],
                       ),
                     ),
                   ),
@@ -286,13 +345,17 @@ class HomeContent extends StatelessWidget {
                       }
                     },
                   ),
+                  // ✅ Duas - Only ONE, working navigation
                   _buildQuickAction(
                     context,
-                    Icons.local_library,
+                    Icons.volunteer_activism,
                     'Duas',
                         () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Duas feature coming soon!')),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DuasHomeScreen(),
+                        ),
                       );
                     },
                   ),
@@ -305,19 +368,6 @@ class HomeContent extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => const CoursesHomeScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildQuickAction(
-                    context,
-                    Icons.local_library,
-                    'Duas',
-                        () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const DuasHomeScreen(),
                         ),
                       );
                     },
@@ -459,7 +509,7 @@ class HomeContent extends StatelessWidget {
     );
   }
 
-
+  // ✅ Quick Action Builder
   Widget _buildQuickAction(
       BuildContext context,
       IconData icon,
@@ -477,7 +527,9 @@ class HomeContent extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(context.isDarkMode ? 0.1 : 0.08),
+                  color: Colors.grey.withOpacity(
+                    Theme.of(context).brightness == Brightness.dark ? 0.1 : 0.08,
+                  ),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
@@ -504,6 +556,7 @@ class HomeContent extends StatelessWidget {
     );
   }
 
+
   Widget _buildRecentItem(BuildContext context, String emoji, String title, String subtitle) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -513,7 +566,9 @@ class HomeContent extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(context.isDarkMode ? 0.1 : 0.05),
+            color: Colors.grey.withOpacity(
+                Theme.of(context).brightness == Brightness.dark ? 0.1 : 0.08
+            ),
             blurRadius: 5,
           ),
         ],

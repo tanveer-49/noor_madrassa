@@ -15,7 +15,7 @@
 
 ## About
 
-**Noor Madrassa** is a modern Islamic learning companion designed for Madrassa students and general users. It combines Qur'an reading, Hadith collections, Islamic books, Madrassa courses, audio recitation, search, bookmarks, Duas, and achievements in one calm and easy-to-use experience.
+**Noor Madrassa** is a modern Islamic learning companion designed for Madrassa students and general users. It combines Qur'an reading, Hadith collections, Islamic books, Madrassa courses, audio recitation, search, bookmarks, Duas, achievements, and notifications in one calm and easy-to-use experience.
 
 **Core Design Principles:**
 
@@ -46,6 +46,7 @@
 | Bookmarks | Done | Save and organize favorite content |
 | Duas & Azkar | Done | Morning/evening, prayer, travel, protection duas |
 | Certificates & Badges | Done | Achievement system with badges and certificates |
+| Push Notifications | Done | In-app notification center + settings |
 | Profile & Progress | Done | User profile, stats, progress |
 | Settings Module | Done | Theme (Light/Dark/System) |
 | Dark/Light Mode | Done | Complete dark theme across all screens |
@@ -59,7 +60,6 @@
 |---------|----------|-------------|
 | Settings Full | Medium | Language, Font Size, Audio Settings |
 | Quiz/Assessment | Medium | Full lesson quizzes |
-| Push Notifications | Low | Daily reminders and updates |
 | Multi-language | Low | English, Urdu, Arabic support |
 | Offline Support | Low | Download content for offline use |
 
@@ -84,7 +84,7 @@
 ### 3. Home Dashboard
 
 - Greeting with name and date
-- Search Icon + Bookmark Icon in top bar
+- Search Icon + Bookmark Icon + Notification Icon (with badge) in top bar
 - Hero Card: "Continue Your Journey" with progress
 - Quick Actions: Qur'an, Hadith, Duas, Courses
 - Daily Ayah with translation
@@ -162,7 +162,17 @@
 - Progress tracking for in-progress badges
 - Certificate Detail: Premium card, Course Details, Share/Download
 
-### 14. Profile Module
+### 14. Push Notifications Module
+
+- Notifications Screen: Filter Chips, Notification Cards
+- Notification Types: Daily Ayah, Daily Hadith, Prayer, Lesson, Streak, Achievement
+- Unread Badge on notification icon
+- Mark All as Read
+- Delete Notification / Clear All
+- Notification Settings: Reminder switches, Time pickers
+- Local Storage: Settings saved with GetStorage
+
+### 15. Profile Module
 
 - Profile Header: Avatar with name and email
 - Stats Cards: Day Streak, Lessons, Certificates
@@ -170,7 +180,7 @@
 - Recent Activity: Feed
 - Quick Actions: Bookmarks, Achievements, Statistics
 
-### 15. Settings Module
+### 16. Settings Module
 
 - User Summary: Profile preview
 - Theme: Light/Dark/System (Working)
@@ -237,7 +247,6 @@
 | Shimmer | Loading animations |
 | Flutter SVG | SVG support |
 
----
 
 ---
 
@@ -264,3 +273,4 @@ flutter pub get
 
 # Run the app
 flutter run
+
